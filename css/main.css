@@ -1,0 +1,31 @@
+.container-grid.container-2 {
+    display: flex;
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.html-element.html-element-1 {
+  padding: 10px;
+}
+
+[class$='btn']:active {
+  transition: fill .2s;
+}
+
+.yellowbtn:active {
+  fill: color(#FCC12D lightness(75%));
+}
+
+.bluebtn:active {
+  fill: color(#1976D3 blackness(-25%));
+    
+}
+
+.greenbtn:active {
+  fill: color(#388F3C blackness(-25%));
+}
+
+.redbtn:active {
+  fill: color(#D42F2F blackness(-25%));
+}
