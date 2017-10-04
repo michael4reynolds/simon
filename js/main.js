@@ -1,3 +1,12 @@
-document.querySelector('.redbtn').onclick = () => {
-  console.log('red button clicked')
-}
+
+// Utilities
+
+// Model
+
+// View
+
+// Controller
+
+// Events
+
+// Initialize
