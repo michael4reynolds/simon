@@ -9,23 +9,31 @@
   padding: 10px;
 }
 
-[class$='btn']:active {
-  transition: fill .2s;
-}
+/*svg > text:focus {*/
+    /*-webkit-user-select: none;*/
+    /*-moz-user-select: none;*/
+    /*-ms-user-select: none;*/
+    /*user-select: none;*/
+    /*fill: green;*/
+/*}*/
 
-.yellowbtn:active {
+/*[class$='Btn'] {*/
+  /*transition: fill .2s;*/
+/*}*/
+
+.yellowBtn.press {
   fill: color(#FCC12D lightness(75%));
 }
 
-.bluebtn:active {
+.blueBtn.press {
   fill: color(#1976D3 blackness(-25%));
     
 }
 
-.greenbtn:active {
+.greenBtn.press {
   fill: color(#388F3C blackness(-25%));
 }
 
-.redbtn:active {
+.redBtn.press {
   fill: color(#D42F2F blackness(-25%));
 }
