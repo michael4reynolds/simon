@@ -4,20 +4,25 @@ function randomNote() {
 }
 
 function sleep(ms = 0) {
-  return new Promise(r => setTimeout(r, ms))
+  let timeout
+  const promise = new Promise(r => timeout = setTimeout(r, ms))
+  promise.cancel = () => clearTimeout(timeout)
+
+  return promise
 }
 
 // Model
-const BLUE = {button: document.querySelector('.blueBtn')}
-const YELLOW = {button: document.querySelector('.yellowBtn')}
-const GREEN = {button: document.querySelector('.greenBtn')}
-const RED = {button: document.querySelector('.redBtn')}
+const BLUE = {key: 0, button: document.querySelector('.blueBtn')}
+const YELLOW = {key: 1, button: document.querySelector('.yellowBtn')}
+const GREEN = {key: 2, button: document.querySelector('.greenBtn')}
+const RED = {key: 3, button: document.querySelector('.redBtn')}
 
 const buttonsPads = [BLUE, YELLOW, GREEN, RED]
 const PRESS = 'press'
 const DELAY = 500
 let LISTENING = false
 let GAMEOVER = false
+let timer
 
 
 let notes = []
@@ -47,7 +52,11 @@ async function playNotes() {
     }
   }
   await play()
-  console.log('finished waiting')
+}
+
+function addRecalledNote(pad) {
+  recalled.push(pad.key)
+  console.log(recalled)
 }
 
 function listen() {
@@ -63,14 +72,19 @@ const startNewGame = async () => {
 // Events
 buttonsPads.forEach(pad => {
   pad.button.onmousedown = () => {
-    console.log('clicked')
-    if (LISTENING)
-      console.log('heard')
+    if (LISTENING) {
       pad.button.classList.add(PRESS)
+    }
   }
-  pad.button.onmouseup = () => {
-    if (LISTENING)
+  pad.button.onmouseup = async () => {
+    if (LISTENING) {
       pad.button.classList.remove(PRESS)
+      addRecalledNote(pad)
+      if (timer) timer.cancel()
+      timer = sleep(3000)
+      await timer
+      console.log('turn over')
+    }
   }
 })
 
