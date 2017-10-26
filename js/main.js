@@ -11,6 +11,10 @@ function sleep(ms = 0) {
   return promise
 }
 
+const arrayIsEqual = (arr1, arr2) => {
+  return JSON.stringify(arr1.slice(0, arr2.length)) === JSON.stringify(arr2)
+}
+
 // Model
 const BLUE = {key: 0, button: document.querySelector('.blueBtn')}
 const YELLOW = {key: 1, button: document.querySelector('.yellowBtn')}
@@ -21,14 +25,13 @@ const buttonsPads = [BLUE, YELLOW, GREEN, RED]
 const PRESS = 'press'
 const DELAY = 500
 let LISTENING = false
-let GAMEOVER = false
+let GAME_OVER = false
 let timer
 
 
 let notes = []
 let recalled = []
 let count = 0
-let tally = 0
 
 // View
 
@@ -40,10 +43,8 @@ const addNote = () => {
 
 async function playNotes() {
   LISTENING = false
-  console.log(notes)
   let play = async () => {
     for (let note of notes) {
-      console.log(note)
       let button = buttonsPads[note].button
       button.classList.add(PRESS)
       await sleep(DELAY)
@@ -54,19 +55,20 @@ async function playNotes() {
   await play()
 }
 
-function addRecalledNote(pad) {
-  recalled.push(pad.key)
-  console.log(recalled)
-}
-
-function listen() {
+const newTurn = async () => {
+  addNote()
+  console.log(notes)
+  recalled = []
+  await playNotes()
   LISTENING = true
 }
 
-const startNewGame = async () => {
-  addNote()
-  await playNotes()
-  listen()
+function endGame() {
+  count = notes.length - 1
+  GAME_OVER = true
+  LISTENING = false
+  console.log('GAME OVER')
+  console.log(`SCORE: ${count}`)
 }
 
 // Events
@@ -79,11 +81,16 @@ buttonsPads.forEach(pad => {
   pad.button.onmouseup = async () => {
     if (LISTENING) {
       pad.button.classList.remove(PRESS)
-      addRecalledNote(pad)
+      recalled.push(pad.key)
       if (timer) timer.cancel()
+      if (!arrayIsEqual(notes, recalled)) {
+        endGame()
+        return
+      }
       timer = sleep(3000)
       await timer
       console.log('turn over')
+      await newTurn()
     }
   }
 })
@@ -91,7 +98,7 @@ buttonsPads.forEach(pad => {
 // Initialize
 function init() {
   try {
-    startNewGame()
+    newTurn()
   } catch (e) {
     console.log(e)
   }
