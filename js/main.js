@@ -82,7 +82,13 @@ const newTurn = async () => {
   console.log(notes)
   recalled = []
   await playNotes()
+
   LISTENING = true
+  timer = sleep(3000)
+  await timer
+  if (recalled.length === 0) {
+    endGame()
+  }
 }
 
 function endGame() {
@@ -114,6 +120,10 @@ buttonsPads.forEach(pad => {
       }
       timer = sleep(3000)
       await timer
+      if (notes.length !== recalled.length) {
+        endGame()
+        return
+      }
       console.log('turn over')
       await newTurn()
     }
