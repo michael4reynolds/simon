@@ -35,12 +35,12 @@ class Sound {
 }
 
 // Model
-const BLUE = {key: 0, button: document.querySelector('.blueBtn'), tone: 'sounds/simonSound1.mp3'}
-const YELLOW = {key: 1, button: document.querySelector('.yellowBtn'), tone: 'sounds/simonSound2.mp3'}
-const GREEN = {key: 2, button: document.querySelector('.greenBtn'), tone: 'sounds/simonSound3.mp3'}
-const RED = {key: 3, button: document.querySelector('.redBtn'), tone: 'sounds/simonSound4.mp3'}
+const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sounds/simonSound0.mp3'}
+const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/simonSound1.mp3'}
+const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
+const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
 
-const buttonsPads = [BLUE, YELLOW, GREEN, RED]
+const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
 let padSound
@@ -87,6 +87,7 @@ const newTurn = async () => {
   timer = sleep(3000)
   await timer
   if (recalled.length === 0) {
+    console.log('times up!')
     endGame()
   }
 }
