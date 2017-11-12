@@ -9,25 +9,12 @@
   padding: 10px;
 }
 
-/*svg > text:focus {*/
-    /*-webkit-user-select: none;*/
-    /*-moz-user-select: none;*/
-    /*-ms-user-select: none;*/
-    /*user-select: none;*/
-    /*fill: green;*/
-/*}*/
-
-/*[class$='Btn'] {*/
-  /*transition: fill .2s;*/
-/*}*/
-
 .yellowBtn.press {
   fill: color(#FCC12D lightness(75%));
 }
 
 .blueBtn.press {
   fill: color(#1976D3 blackness(-25%));
-    
 }
 
 .greenBtn.press {
@@ -36,4 +23,20 @@
 
 .redBtn.press {
   fill: color(#D42F2F blackness(-25%));
+}
+
+#GameOnBtn {
+  fill: color(#010001)
+}
+
+#GameOnBtn.active {
+  fill: color(#fc0e04);
+}
+
+#GameOffBtn {
+  fill: color(#010001)
+}
+
+#GameOffBtn.active {
+  fill: color(#fc0e04);
 }

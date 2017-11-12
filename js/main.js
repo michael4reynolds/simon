@@ -46,6 +46,7 @@ const DELAY = 500
 let padSound
 let LISTENING = false
 let GAME_OVER = false
+let GAME_ON = false
 let timer
 
 let notes = []
@@ -53,6 +54,9 @@ let recalled = []
 let count = 0
 
 // View
+const gameOnBtn = document.querySelector('#GameOnBtn')
+const gameOffBtn = document.querySelector('#GameOffBtn')
+const scoreView = document.querySelector('#Score')
 
 // Controller
 const addNote = () => {
@@ -64,6 +68,7 @@ async function playNotes() {
   LISTENING = false
   let play = async () => {
     for (let note of notes) {
+      if (GAME_OVER) break
       let button = buttonsPads[note].button
       padSound = new Sound(buttonsPads[note].tone)
       button.classList.add(PRESS)
@@ -86,6 +91,7 @@ const newTurn = async () => {
   LISTENING = true
   timer = sleep(3000)
   await timer
+  if (GAME_OVER) return
   if (recalled.length === 0) {
     console.log('times up!')
     endGame()
@@ -93,11 +99,24 @@ const newTurn = async () => {
 }
 
 function endGame() {
-  count = notes.length - 1
+  count = GAME_OVER || !GAME_ON ? 0 : notes.length - 1
   GAME_OVER = true
   LISTENING = false
+
+  padSound = null
+  timer = null
+  notes = []
+
   console.log('GAME OVER')
   console.log(`SCORE: ${count}`)
+}
+
+function showScore() {
+  scoreView.textContent = '0'
+}
+
+function hideScore() {
+  scoreView.textContent = ''
 }
 
 // Events
@@ -131,10 +150,28 @@ buttonsPads.forEach(pad => {
   }
 })
 
+gameOffBtn.onclick = () => {
+  console.log('off switch')
+  GAME_ON = false
+  hideScore()
+  endGame()
+  gameOnBtn.classList.remove('active')
+  gameOffBtn.classList.add('active')
+}
+
+gameOnBtn.onclick = () => {
+  console.log('on switch')
+  GAME_ON = true
+  showScore()
+  // newTurn()
+  gameOffBtn.classList.remove('active')
+  gameOnBtn.classList.add('active')
+}
+
 // Initialize
 function init() {
   try {
-    newTurn()
+    gameOffBtn.classList.add('active')
   } catch (e) {
     console.log(e)
   }
