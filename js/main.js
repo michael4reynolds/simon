@@ -45,7 +45,7 @@ const PRESS = 'press'
 const DELAY = 500
 let padSound
 let LISTENING = false
-let GAME_OVER = false
+let GAME_OVER = true
 let GAME_ON = false
 let timer
 
@@ -57,6 +57,7 @@ let count = 0
 const gameOnBtn = document.querySelector('#GameOnBtn')
 const gameOffBtn = document.querySelector('#GameOffBtn')
 const scoreView = document.querySelector('#Score')
+const startBtn = document.querySelector('#StartBtn')
 
 // Controller
 const addNote = () => {
@@ -163,9 +164,15 @@ gameOnBtn.onclick = () => {
   console.log('on switch')
   GAME_ON = true
   showScore()
-  // newTurn()
   gameOffBtn.classList.remove('active')
   gameOnBtn.classList.add('active')
+}
+
+startBtn.onclick = () => {
+  if (GAME_ON && GAME_OVER) {
+    GAME_OVER = false
+    newTurn()
+  }
 }
 
 // Initialize
