@@ -51,7 +51,6 @@ let timer
 
 let notes = []
 let recalled = []
-let count = 0
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -60,6 +59,10 @@ const scoreView = document.querySelector('#Score')
 const startBtn = document.querySelector('#StartBtn')
 
 // Controller
+function getScore() {
+  return GAME_OVER || !GAME_ON ? 0 : notes.length - 1
+}
+
 const addNote = () => {
   let newNote = randomNote()
   notes.push(newNote)
@@ -84,6 +87,7 @@ async function playNotes() {
 }
 
 const newTurn = async () => {
+  scoreView.textContent = getScore() + 1
   addNote()
   console.log(notes)
   recalled = []
@@ -100,7 +104,7 @@ const newTurn = async () => {
 }
 
 function endGame() {
-  count = GAME_OVER || !GAME_ON ? 0 : notes.length - 1
+  scoreView.textContent = getScore()
   GAME_OVER = true
   LISTENING = false
 
@@ -109,7 +113,6 @@ function endGame() {
   notes = []
 
   console.log('GAME OVER')
-  console.log(`SCORE: ${count}`)
 }
 
 function showScore() {
