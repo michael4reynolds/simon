@@ -43,10 +43,13 @@ const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sou
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
+const DELAY2 = 3000
 let padSound
 let LISTENING = false
 let GAME_OVER = true
 let GAME_ON = false
+let STRICT_MODE = false
+let RESTART = false
 let timer
 
 let notes = []
@@ -60,7 +63,8 @@ const startBtn = document.querySelector('#StartBtn')
 
 // Controller
 function getScore() {
-  return GAME_OVER || !GAME_ON ? 0 : notes.length - 1
+  if (!GAME_ON) return ''
+  return GAME_OVER ? 0 : notes.length
 }
 
 const addNote = () => {
@@ -72,29 +76,35 @@ async function playNotes() {
   LISTENING = false
   let play = async () => {
     for (let note of notes) {
-      if (GAME_OVER) break
-      let button = buttonsPads[note].button
-      padSound = new Sound(buttonsPads[note].tone)
-      button.classList.add(PRESS)
-      padSound.play()
-      await sleep(DELAY)
-      button.classList.remove(PRESS)
-      // padSound.stop()
-      await sleep(DELAY)
+      if (GAME_OVER || RESTART) {
+        console.log('BREAK')
+        break;
+      } else {
+        console.log(`playing: ${note}`)
+        let button = buttonsPads[note].button
+        padSound = new Sound(buttonsPads[note].tone)
+        button.classList.add(PRESS)
+        padSound.play()
+        await sleep(DELAY)
+        button.classList.remove(PRESS)
+        // padSound.stop()
+        await sleep(DELAY)
+      }
     }
   }
-  await play()
+  if (!(GAME_OVER || RESTART)) await play()
 }
 
-const newTurn = async () => {
-  scoreView.textContent = getScore() + 1
-  addNote()
+const newTurn = async (retry = false) => {
+  scoreView.textContent = retry ? getScore() - 1 : getScore()
+  if (!retry) addNote()
   console.log(notes)
   recalled = []
   await playNotes()
 
+  RESTART = false
   LISTENING = true
-  timer = sleep(3000)
+  timer = sleep(DELAY2)
   await timer
   if (GAME_OVER) return
   if (recalled.length === 0) {
@@ -103,24 +113,26 @@ const newTurn = async () => {
   }
 }
 
-function endGame() {
-  scoreView.textContent = getScore()
-  GAME_OVER = true
+async function endGame() {
   LISTENING = false
-
   padSound = null
   timer = null
-  notes = []
+  scoreView.textContent = !GAME_ON ? '' : `${getScore() - 1}`
 
-  console.log('GAME OVER')
+  if (STRICT_MODE || !GAME_ON) {
+    GAME_OVER = true
+    notes = []
+    console.log('GAME OVER')
+  } else {
+    console.log('Try again')
+    timer = sleep(2000)
+    await timer
+    await newTurn(true)
+  }
 }
 
 function showScore() {
   scoreView.textContent = '0'
-}
-
-function hideScore() {
-  scoreView.textContent = ''
 }
 
 // Events
@@ -142,7 +154,7 @@ buttonsPads.forEach(pad => {
         endGame()
         return
       }
-      timer = sleep(3000)
+      timer = sleep(DELAY2)
       await timer
       if (notes.length !== recalled.length) {
         endGame()
@@ -157,7 +169,6 @@ buttonsPads.forEach(pad => {
 gameOffBtn.onclick = () => {
   console.log('off switch')
   GAME_ON = false
-  hideScore()
   endGame()
   gameOnBtn.classList.remove('active')
   gameOffBtn.classList.add('active')
@@ -172,8 +183,14 @@ gameOnBtn.onclick = () => {
 }
 
 startBtn.onclick = () => {
-  if (GAME_ON && GAME_OVER) {
+  if (GAME_ON) {
+    LISTENING = false
+    padSound = null
+    timer = null
     GAME_OVER = false
+    RESTART = true
+    notes = []
+    showScore()
     newTurn()
   }
 }
