@@ -28,13 +28,11 @@ class Sound {
   play() {
     this.sound.play()
   }
-
-  stop() {
-    this.sound.pause()
-  }
 }
 
 // Model
+const TURNS = {computer: 'computer', human: 'human'}
+const STATES = {on: false, started: false, turn: TURNS.computer, strict: false, last: [], longest: []}
 const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sounds/simonSound0.mp3'}
 const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/simonSound1.mp3'}
 const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
@@ -44,15 +42,6 @@ const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
 const DELAY2 = 3000
-let padSound
-let LISTENING = false
-let GAME_OVER = true
-let GAME_ON = false
-let STRICT_MODE = false
-let timer
-
-let notes = []
-let recalled = []
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -61,141 +50,31 @@ const scoreView = document.querySelector('#Score')
 const startBtn = document.querySelector('#StartBtn')
 
 // Controller
-function getScore() {
-  if (!GAME_ON) return ''
-  return GAME_OVER ? 0 : notes.length
-}
 
-const addNote = () => {
-  console.log('new note')
-  let newNote = randomNote()
-  notes.push(newNote)
-}
-
-async function playNotes() {
-  LISTENING = false
-  let play = async () => {
-    for (let note of notes) {
-      if (GAME_OVER) {
-        console.log('BREAK')
-        break;
-      } else {
-        console.log(`playing: ${note}`)
-        let button = buttonsPads[note].button
-        padSound = new Sound(buttonsPads[note].tone)
-        button.classList.add(PRESS)
-        padSound.play()
-        await sleep(DELAY)
-        button.classList.remove(PRESS)
-        // padSound.stop()
-        await sleep(DELAY)
-      }
-    }
-  }
-  if (!GAME_OVER) await play()
-}
-
-const newTurn = async (retry = false) => {
-  scoreView.textContent = retry ? getScore() - 1 : getScore()
-  if (!retry) addNote()
-  console.log(notes)
-  recalled = []
-  await playNotes()
-
-  LISTENING = true
-  timer = sleep(DELAY2)
-  await timer
-  // if (GAME_OVER) return
-  if (recalled.length === 0) {
-    console.log('times up!')
-    endGame()
-  }
-}
-
-async function endGame() {
-  LISTENING = false
-  padSound = null
-  timer = null
-  scoreView.textContent = !GAME_ON ? '' : `${getScore() - 1}`
-
-  if (STRICT_MODE || !GAME_ON) {
-    GAME_OVER = true
-    notes = []
-    console.log('GAME OVER')
-  } else {
-    console.log('Try again')
-    timer = sleep(2000)
-    await timer
-    await newTurn(true)
-  }
-}
-
-async function beginGame() {
-  LISTENING = false
-  padSound = null
-  timer = null
-  GAME_OVER = false
-  notes = []
-  scoreView.textContent = ''
-  await sleep(DELAY)
-  if (GAME_ON) {
-    newTurn()
-  }
-}
-
-function showScore() {
-  scoreView.textContent = '0'
-}
 
 // Events
 buttonsPads.forEach(pad => {
   pad.button.onmousedown = () => {
-    if (LISTENING) {
-      pad.button.classList.add(PRESS)
-      padSound = new Sound(pad.tone)
-      padSound.play()
-    }
+    pad.button.classList.add(PRESS)
+    new Sound(pad.tone).play()
   }
   pad.button.onmouseup = async () => {
-    if (LISTENING) {
-      pad.button.classList.remove(PRESS)
-      // padSound.stop()
-      recalled.push(pad.key)
-      if (timer) timer.cancel()
-      if (!arrayIsEqual(notes, recalled)) {
-        endGame()
-        return
-      }
-      timer = sleep(DELAY2)
-      await timer
-      if (notes.length !== recalled.length) {
-        endGame()
-        return
-      }
-      console.log('turn over')
-      await newTurn()
-    }
+    pad.button.classList.remove(PRESS)
   }
 })
 
 gameOffBtn.onclick = () => {
-  console.log('off switch')
-  GAME_ON = false
-  endGame()
   gameOnBtn.classList.remove('active')
   gameOffBtn.classList.add('active')
 }
 
 gameOnBtn.onclick = () => {
-  console.log('on switch')
-  GAME_ON = true
-  showScore()
   gameOffBtn.classList.remove('active')
   gameOnBtn.classList.add('active')
 }
 
-startBtn.onclick = async () => {
-  beginGame()
+startBtn.onclick = () => {
+
 }
 
 // Initialize
