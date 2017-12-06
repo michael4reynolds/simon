@@ -49,7 +49,6 @@ let LISTENING = false
 let GAME_OVER = true
 let GAME_ON = false
 let STRICT_MODE = false
-let RESTART = false
 let timer
 
 let notes = []
@@ -68,6 +67,7 @@ function getScore() {
 }
 
 const addNote = () => {
+  console.log('new note')
   let newNote = randomNote()
   notes.push(newNote)
 }
@@ -76,7 +76,7 @@ async function playNotes() {
   LISTENING = false
   let play = async () => {
     for (let note of notes) {
-      if (GAME_OVER || RESTART) {
+      if (GAME_OVER) {
         console.log('BREAK')
         break;
       } else {
@@ -92,7 +92,7 @@ async function playNotes() {
       }
     }
   }
-  if (!(GAME_OVER || RESTART)) await play()
+  if (!GAME_OVER) await play()
 }
 
 const newTurn = async (retry = false) => {
@@ -102,11 +102,10 @@ const newTurn = async (retry = false) => {
   recalled = []
   await playNotes()
 
-  RESTART = false
   LISTENING = true
   timer = sleep(DELAY2)
   await timer
-  if (GAME_OVER) return
+  // if (GAME_OVER) return
   if (recalled.length === 0) {
     console.log('times up!')
     endGame()
@@ -128,6 +127,19 @@ async function endGame() {
     timer = sleep(2000)
     await timer
     await newTurn(true)
+  }
+}
+
+async function beginGame() {
+  LISTENING = false
+  padSound = null
+  timer = null
+  GAME_OVER = false
+  notes = []
+  scoreView.textContent = ''
+  await sleep(DELAY)
+  if (GAME_ON) {
+    newTurn()
   }
 }
 
@@ -182,17 +194,8 @@ gameOnBtn.onclick = () => {
   gameOnBtn.classList.add('active')
 }
 
-startBtn.onclick = () => {
-  if (GAME_ON) {
-    LISTENING = false
-    padSound = null
-    timer = null
-    GAME_OVER = false
-    RESTART = true
-    notes = []
-    showScore()
-    newTurn()
-  }
+startBtn.onclick = async () => {
+  beginGame()
 }
 
 // Initialize
