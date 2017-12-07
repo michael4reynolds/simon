@@ -37,6 +37,7 @@ const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sound
 const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/simonSound1.mp3'}
 const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
 const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
+const recalled = []
 
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
@@ -50,7 +51,33 @@ const scoreView = document.querySelector('#Score')
 const startBtn = document.querySelector('#StartBtn')
 
 // Controller
+let resetState = (strict = false) => {
+  STATES.started = true
+  STATES.turn = TURNS.computer
+  STATES.last = []
+  STATES.longest = []
+  STATES.strict = strict
+}
 
+const addMove = () => {
+  STATES.last.push(randomNote())
+}
+
+const playMoves = async () => {
+  for (let move of STATES.last) {
+    let sound = new Sound(buttonsPads[move].tone)
+    sound.play()
+    await sleep(DELAY)
+  }
+}
+
+const beginGame = () => {
+  if (!STATES.on) return
+  resetState(STATES.strict)
+  addMove()
+  console.log(STATES.last)
+  playMoves()
+}
 
 // Events
 buttonsPads.forEach(pad => {
@@ -66,15 +93,17 @@ buttonsPads.forEach(pad => {
 gameOffBtn.onclick = () => {
   gameOnBtn.classList.remove('active')
   gameOffBtn.classList.add('active')
+  STATES.on = false
 }
 
 gameOnBtn.onclick = () => {
   gameOffBtn.classList.remove('active')
   gameOnBtn.classList.add('active')
+  STATES.on = true
 }
 
 startBtn.onclick = () => {
-
+  beginGame()
 }
 
 // Initialize
