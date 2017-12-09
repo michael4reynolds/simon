@@ -52,7 +52,6 @@ const startBtn = document.querySelector('#StartBtn')
 
 // Controller
 let resetState = (strict = false) => {
-  STATES.started = true
   STATES.turn = TURNS.computer
   STATES.last = []
   STATES.longest = []
@@ -63,25 +62,48 @@ const addMove = () => {
   STATES.last.push(randomNote())
 }
 
+const playMove = async function (move) {
+  let sound = new Sound(buttonsPads[move].tone)
+  sound.play()
+  let button = buttonsPads[move].button
+  button.classList.add(PRESS)
+  await sleep(DELAY)
+  button.classList.remove(PRESS)
+  await sleep(DELAY)
+}
+
 const playMoves = async () => {
+  STATES.turn = TURNS.computer
   for (let move of STATES.last) {
-    let sound = new Sound(buttonsPads[move].tone)
-    sound.play()
-    await sleep(DELAY)
+    if (!STATES.on || !STATES.started) break
+    await playMove(move)
   }
 }
 
-const beginGame = () => {
+const listen = async () => {
+  STATES.turn = TURNS.human
+}
+
+const playGame = async () => {
+  while (STATES.on && STATES.started) {
+    addMove()
+    console.log(STATES.last)
+    await playMoves()
+    await listen()
+  }
+}
+
+const beginGame = async () => {
   if (!STATES.on) return
+  STATES.started = !STATES.started
   resetState(STATES.strict)
-  addMove()
-  console.log(STATES.last)
-  playMoves()
+  await playGame()
 }
 
 // Events
 buttonsPads.forEach(pad => {
   pad.button.onmousedown = () => {
+    if (STATES.turn === TURNS.computer) return
     pad.button.classList.add(PRESS)
     new Sound(pad.tone).play()
   }
@@ -94,6 +116,8 @@ gameOffBtn.onclick = () => {
   gameOnBtn.classList.remove('active')
   gameOffBtn.classList.add('active')
   STATES.on = false
+  STATES.started = false
+  resetState(false)
 }
 
 gameOnBtn.onclick = () => {
@@ -103,6 +127,7 @@ gameOnBtn.onclick = () => {
 }
 
 startBtn.onclick = () => {
+  if (!STATES.on) return
   beginGame()
 }
 
