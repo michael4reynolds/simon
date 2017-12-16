@@ -12,10 +12,6 @@ function sleep(ms = 0) {
 }
 
 const arrayIsEqual = (arr1, arr2) => {
-  console.log(arr1)
-  console.log(arr2)
-  console.log(`arr1_slice: ${arr1.slice(0, arr2.length)}`)
-  console.log(`arr2__full: ${arr2}`)
   return JSON.stringify(arr1.slice(0, arr2.length)) === JSON.stringify(arr2)
 }
 
@@ -37,8 +33,8 @@ class Sound {
 // Model
 const TURNS = {computer: 'computer', human: 'human'}
 const STATES = {
-  on: false, started: false, turn: TURNS.computer,
-  strict: false, last: [], recalled: [], lost: false
+  on: false, started: false, turn: TURNS.computer, strict: false,
+  last: [], recalled: [], lost: false, pressed: false, timeout: false,
 }
 const SAVED = {last: [], longest: []}
 const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sounds/simonSound0.mp3'}
@@ -52,7 +48,7 @@ let timer2
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
-const DELAY2 = 3000
+const DELAY2 = 5000
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -70,11 +66,7 @@ let resetState = (strict = false) => {
 }
 
 let cancelTimers = () => {
-  if (timer) {
-    timer.cancel()
-    timer1.cancel()
-    timer2.cancel()
-  }
+  if (timer) timer.cancel()
 }
 
 const addMove = () => {
@@ -101,28 +93,15 @@ const playMoves = async () => {
 }
 
 let running = () => STATES.on && STATES.started
-let buttonPressed = length => length < STATES.last.length
 
 const listen = async () => {
   // todo: set listen timer to reset after each button press
   STATES.turn = TURNS.human
-  let length = STATES.recalled.length
-  timer = await sleep(DELAY2)
 
-  if (buttonPressed(length)) {
-    console.log('Pressed')
-    if (arrayIsEqual(STATES.last, STATES.recalled)) {
-      console.log('Equal')
-      STATES.lost = false
-    } else {
-      console.log('Not Equal')
-      STATES.lost = true
-      // if (STATES.strict) return
-    }
-  } else { // timed-out
-    console.log('Timed out')
-    STATES.lost = true
-    // if (STATES.strict) return
+  checkTimeout(DELAY2)
+
+  while (!STATES.timeout) {
+    await sleep(1000)
   }
 }
 
@@ -131,9 +110,9 @@ const playGame = async () => {
     if (STATES.lost) {
       console.log('Lost last round')
     } else {
-      addMove();
+      addMove()
     }
-    console.log(STATES.last)
+    console.log(STATES.lost, STATES.last)
     await playMoves()
     await listen()
   }
@@ -148,8 +127,24 @@ const beginGame = async () => {
   await playGame()
 }
 
-let playTone = tone => {
+const playTone = tone => {
   new Sound(tone).play()
+}
+
+const setTimeoutState = () => {
+  console.log(STATES.pressed, STATES.last, STATES.recalled)
+  if (!STATES.pressed) {
+    STATES.timeout = true
+    // todo: check for equal here
+    // if ( STATES.recalled.length === 0) STATES.lost = true
+  }
+  STATES.pressed = false
+}
+
+const checkTimeout = async function (delay = 0) {
+  STATES.timeout = false
+  await sleep(delay)
+  setTimeoutState()
 }
 
 // Events
@@ -160,9 +155,12 @@ buttonsPads.forEach(pad => {
     STATES.recalled.push(pad.key)
     // todo: create tone for incorrect entry
     playTone(pad.tone)
+    STATES.pressed = true
   }
   pad.button.onmouseup = async () => {
     pad.button.classList.remove(PRESS)
+    STATES.lost = arrayIsEqual(STATES.last, STATES.recalled)
+    await checkTimeout(DELAY2)
   }
 })
 
