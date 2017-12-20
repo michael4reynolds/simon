@@ -11,10 +11,6 @@ function sleep(ms = 0) {
   return promise
 }
 
-const arrayIsEqual = (arr1, arr2) => {
-  return JSON.stringify(arr1.slice(0, arr2.length)) === JSON.stringify(arr2)
-}
-
 class Sound {
   constructor(src) {
     this.sound = document.createElement("audio")
@@ -132,6 +128,14 @@ buttonsPads.forEach(pad => {
     pad.button.classList.add(PRESS)
     // todo: check for correct entry
     STATES.recalled.push(pad.key)
+    for (const [i, v] of STATES.recalled.entries()) {
+      console.log(STATES.last[i], v)
+      if (STATES.last[i] !== v) {
+        console.log('wrong!')
+        STATES.lost = true
+        break
+      }
+    }
     // todo: create tone for incorrect entry
     playTone(pad.tone)
     STATES.pressed = true
