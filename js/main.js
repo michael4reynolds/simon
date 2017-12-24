@@ -3,9 +3,10 @@ function randomNote() {
   return Math.floor(Math.random() * 4)
 }
 
-function sleep(ms = 0) {
+function sleep(ms = 0, x) {
   let timeout
-  const promise = new Promise(r => timeout = setTimeout(r, ms))
+  // const promise = new Promise(r => timeout = setTimeout(r, ms))
+  const promise = new Promise(r => timeout = setTimeout(() => r(x), ms))
   promise.cancel = () => clearTimeout(timeout)
 
   return promise
@@ -38,6 +39,7 @@ const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/si
 const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
 const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
 let timer
+let padTimer
 
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
@@ -61,6 +63,7 @@ let resetState = (strict = false) => {
 
 let cancelTimers = () => {
   if (timer) clearTimeout(timer)
+  if (padTimer) padTimer.cancel()
 }
 
 const addMove = () => {
@@ -98,12 +101,12 @@ const playGame = async () => {
     await playMoves()
 
     STATES.turn = TURNS.human
-    timer = setTimeout(() => {
+    timer = setTimeout(async () => {
       console.log('timer finished')
       if (!STATES.pressed) {
         STATES.lost = true
         console.log('timed out!')
-        playGame()
+        await playGame()
       }
     }, DELAY2)
   }
@@ -120,26 +123,39 @@ const playTone = tone => {
   new Sound(tone).play()
 }
 
+async function checkInput(pad) {
+  STATES.recalled.push(pad.key)
+  STATES.lost = false
+
+  for (const [i, v] of STATES.recalled.entries()) {
+    console.log(STATES.last[i], v)
+    if (STATES.last[i] !== v) {
+      console.log('wrong!')
+      STATES.lost = true
+      break
+    }
+  }
+  playTone(pad.tone)  // todo: create tone for incorrect entry
+
+  // set up timeout here
+  padTimer = sleep(3000, {pressed: false, lost: true})
+  return padTimer
+}
+
 // Events
 buttonsPads.forEach(pad => {
   pad.button.onmousedown = () => {
     if (STATES.turn === TURNS.computer) return
-    clearTimeout(timer)
+    cancelTimers()
     pad.button.classList.add(PRESS)
-    // todo: check for correct entry
-    STATES.recalled.push(pad.key)
-    for (const [i, v] of STATES.recalled.entries()) {
-      console.log(STATES.last[i], v)
-      if (STATES.last[i] !== v) {
-        console.log('wrong!')
-        STATES.lost = true
-        break
-      }
-    }
-    // todo: create tone for incorrect entry
-    playTone(pad.tone)
     STATES.pressed = true
+
+    checkInput(pad).then((x) => {
+      console.log(x)
+      // playGame()
+    })
   }
+
   pad.button.onmouseup = async () => {
     pad.button.classList.remove(PRESS)
   }
