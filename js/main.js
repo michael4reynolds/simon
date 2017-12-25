@@ -128,17 +128,19 @@ async function checkInput(pad) {
   STATES.lost = false
 
   for (const [i, v] of STATES.recalled.entries()) {
-    console.log(STATES.last[i], v)
     if (STATES.last[i] !== v) {
       console.log('wrong!')
       STATES.lost = true
       break
     }
   }
-  playTone(pad.tone)  // todo: create tone for incorrect entry
+  // todo: create tone for incorrect entry
+  // let tone = STATES.lost ? errorTone : pad.tone
+  let tone = pad.tone
+  playTone(tone)
 
   // set up timeout here
-  padTimer = sleep(3000, {pressed: false, lost: true})
+  padTimer = sleep(3000)
   return padTimer
 }
 
@@ -150,9 +152,8 @@ buttonsPads.forEach(pad => {
     pad.button.classList.add(PRESS)
     STATES.pressed = true
 
-    checkInput(pad).then((x) => {
-      console.log(x)
-      // playGame()
+    checkInput(pad).then(async () => {
+      await playGame()
     })
   }
 
