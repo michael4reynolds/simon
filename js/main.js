@@ -38,6 +38,7 @@ const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sound
 const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/simonSound1.mp3'}
 const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
 const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
+const errorTone = 'sounds/simonError.mp3'
 let timer
 let padTimer
 
@@ -135,8 +136,7 @@ async function checkInput(pad) {
     }
   }
   // todo: create tone for incorrect entry
-  // let tone = STATES.lost ? errorTone : pad.tone
-  let tone = pad.tone
+  let tone = STATES.lost ? errorTone : pad.tone
   playTone(tone)
 
   // set up timeout here
