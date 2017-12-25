@@ -40,3 +40,11 @@
 #GameOffBtn.active {
   fill: color(#fc0e04);
 }
+
+#StrictBtn {
+  fill: #fac12c
+}
+
+#StrictBtn.active {
+  fill: color(#5cb85c)
+}

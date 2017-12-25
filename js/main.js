@@ -52,6 +52,7 @@ const gameOnBtn = document.querySelector('#GameOnBtn')
 const gameOffBtn = document.querySelector('#GameOffBtn')
 const scoreView = document.querySelector('#Score')
 const startBtn = document.querySelector('#StartBtn')
+const strictBtn = document.querySelector('#StrictBtn')
 
 // Controller
 let resetState = (strict = false) => {
@@ -179,6 +180,14 @@ gameOnBtn.onclick = () => {
 
 startBtn.onclick = () => {
   beginGame()
+}
+
+strictBtn.onclick = () => {
+  if (!strictBtn.classList.contains('active')) {
+    strictBtn.classList.add('active')
+  } else {
+    strictBtn.classList.remove('active')
+  }
 }
 
 // Initialize
