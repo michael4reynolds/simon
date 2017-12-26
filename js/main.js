@@ -45,7 +45,7 @@ let padTimer
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
-const DELAY2 = 3000
+const DELAY2 = 2000
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -96,14 +96,16 @@ const playGame = async () => {
     if (!STATES.lost) addMove();
     STATES.turn = TURNS.computer
     STATES.recalled = []
+    STATES.pressed = false
     await playMoves()
 
     STATES.turn = TURNS.human
     timer = setTimeout(async () => {
       if (!STATES.pressed) {
         STATES.lost = true
-        if (STATES.strict && STATES.lost) return
-        await playGame()      }
+        if (STATES.strict) return
+        await playGame()
+      }
     }, DELAY2)
   }
 }
