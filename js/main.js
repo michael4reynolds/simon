@@ -103,7 +103,9 @@ const playGame = async () => {
     timer = setTimeout(async () => {
       if (!STATES.pressed) {
         STATES.lost = true
-        if (STATES.strict) return
+        if (STATES.strict) {
+          resetState(STATES.strict)
+        }
         await playGame()
       }
     }, DELAY2)
@@ -149,7 +151,9 @@ buttonsPads.forEach(pad => {
     STATES.pressed = true
 
     checkInput(pad).then(async () => {
-      if (STATES.strict && STATES.lost) return
+      if (STATES.strict && STATES.lost) {
+        resetState(STATES.strict)
+      }
       await playGame()
     })
   }
