@@ -108,8 +108,8 @@ const playGame = async () => {
       if (!STATES.pressed) {
         STATES.lost = true
         console.log('timed out!')
-        await playGame()
-      }
+        if (STATES.strict && STATES.lost) return
+        await playGame()      }
     }, DELAY2)
   }
 }
@@ -154,6 +154,7 @@ buttonsPads.forEach(pad => {
     STATES.pressed = true
 
     checkInput(pad).then(async () => {
+      if (STATES.strict && STATES.lost) return
       await playGame()
     })
   }
@@ -166,6 +167,7 @@ buttonsPads.forEach(pad => {
 gameOffBtn.onclick = () => {
   gameOnBtn.classList.remove('active')
   gameOffBtn.classList.add('active')
+  strictBtn.classList.remove('active')
   STATES.on = false
   STATES.started = false
   resetState(false)
@@ -183,11 +185,15 @@ startBtn.onclick = () => {
 }
 
 strictBtn.onclick = () => {
-  if (!strictBtn.classList.contains('active')) {
+  if (!STATES.on) return
+  if (!STATES.strict) {
+    STATES.strict = true
     strictBtn.classList.add('active')
   } else {
+    STATES.strict = false
     strictBtn.classList.remove('active')
   }
+  console.log(STATES.strict)
 }
 
 // Initialize
