@@ -93,21 +93,15 @@ let running = () => STATES.on && STATES.started
 
 const playGame = async () => {
   if (running()) {
-    if (STATES.lost) {
-      console.log('Lost last round')
-    } else {
-      addMove()
-    }
+    if (!STATES.lost) addMove();
     STATES.turn = TURNS.computer
     STATES.recalled = []
     await playMoves()
 
     STATES.turn = TURNS.human
     timer = setTimeout(async () => {
-      console.log('timer finished')
       if (!STATES.pressed) {
         STATES.lost = true
-        console.log('timed out!')
         if (STATES.strict && STATES.lost) return
         await playGame()      }
     }, DELAY2)
@@ -131,7 +125,6 @@ async function checkInput(pad) {
 
   for (const [i, v] of STATES.recalled.entries()) {
     if (STATES.last[i] !== v) {
-      console.log('wrong!')
       STATES.lost = true
       break
     }
@@ -193,7 +186,6 @@ strictBtn.onclick = () => {
     STATES.strict = false
     strictBtn.classList.remove('active')
   }
-  console.log(STATES.strict)
 }
 
 // Initialize
