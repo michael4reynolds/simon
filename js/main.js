@@ -46,6 +46,7 @@ const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
 const DELAY2 = 2000
+const LIMIT = 4
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -133,13 +134,27 @@ async function checkInput(pad) {
       break
     }
   }
-  // todo: create tone for incorrect entry
   let tone = STATES.lost ? errorTone : pad.tone
   playTone(tone)
 
-  // set up timeout here
   padTimer = sleep(3000)
   return padTimer
+}
+
+const checkForWin = () => {
+  let won = false
+  if (STATES.last.length === LIMIT) {
+    won = STATES.recalled.length === LIMIT &&
+      STATES.last[LIMIT] === STATES.recalled[LIMIT]
+  }
+
+  return won
+}
+
+const alertWinner = async () => {
+  console.log('You Won!')
+  timer = sleep(5000)
+  return timer
 }
 
 // Events
@@ -151,7 +166,11 @@ buttonsPads.forEach(pad => {
     STATES.pressed = true
 
     checkInput(pad).then(async () => {
-      if (STATES.strict && STATES.lost) {
+      let won = checkForWin()
+      if (won) {
+        await alertWinner()
+      }
+      if (won || (STATES.strict && STATES.lost)) {
         resetState(STATES.strict)
       }
       await playGame()
