@@ -46,7 +46,7 @@ const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
 const DELAY = 500
 const DELAY2 = 2000
-const LIMIT = 4
+const LIMIT = 20
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
@@ -166,11 +166,10 @@ buttonsPads.forEach(pad => {
     STATES.pressed = true
 
     checkInput(pad).then(async () => {
-      let won = checkForWin()
-      if (won) {
+      if (checkForWin()) {
         await alertWinner()
-      }
-      if (won || (STATES.strict && STATES.lost)) {
+        return
+      } else if (STATES.strict && STATES.lost) {
         resetState(STATES.strict)
       }
       await playGame()
