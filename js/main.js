@@ -25,6 +25,11 @@ class Sound {
   play() {
     this.sound.play()
   }
+
+  stop() {
+    this.sound.pause()
+    this.sound.currentTime = 0
+  }
 }
 
 // Model
@@ -39,8 +44,12 @@ const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/si
 const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
 const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
 const errorTone = 'sounds/simonError.mp3'
+const winningTone = 'sounds/simonWin.mp3'
 let timer
+let winTimer
+let timesUp
 let padTimer
+let currentTone
 
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
@@ -66,6 +75,7 @@ let resetState = (strict = false) => {
 
 let cancelTimers = () => {
   if (timer) clearTimeout(timer)
+  if (winTimer) clearTimeout(winTimer)
   if (padTimer) padTimer.cancel()
 }
 
@@ -94,7 +104,7 @@ let running = () => STATES.on && STATES.started
 
 const playGame = async () => {
   if (running()) {
-    if (!STATES.lost) addMove();
+    if (!STATES.lost) addMove()
     STATES.turn = TURNS.computer
     STATES.recalled = []
     STATES.pressed = false
@@ -120,9 +130,7 @@ const beginGame = async () => {
   await playGame()
 }
 
-const playTone = tone => {
-  new Sound(tone).play()
-}
+const gameTone = tone => new Sound(tone)
 
 async function checkInput(pad) {
   STATES.recalled.push(pad.key)
@@ -135,7 +143,8 @@ async function checkInput(pad) {
     }
   }
   let tone = STATES.lost ? errorTone : pad.tone
-  playTone(tone)
+  currentTone = gameTone(tone)
+  currentTone.play()
 
   padTimer = sleep(3000)
   return padTimer
@@ -147,14 +156,31 @@ const checkForWin = () => {
     won = STATES.recalled.length === LIMIT &&
       STATES.last[LIMIT] === STATES.recalled[LIMIT]
   }
-
   return won
 }
 
+const stopSound = function () {
+  timesUp = true
+  currentTone.stop()
+}
+
 const alertWinner = async () => {
+  STATES.turn = TURNS.computer
+  timesUp = false
+  currentTone = gameTone(winningTone)
+  currentTone.play()
+  winTimer = setTimeout(() => {
+    stopSound()
+  }, 5000)
+  let x = 0
+  while (STATES.on && !timesUp) {
+    let i = x++ % 4
+    buttonsPads[i].button.classList.add(PRESS)
+    timer = sleep(100)
+    await timer
+    buttonsPads[i].button.classList.remove(PRESS)
+  }
   console.log('You Won!')
-  timer = sleep(5000)
-  return timer
 }
 
 // Events
@@ -168,6 +194,7 @@ buttonsPads.forEach(pad => {
     checkInput(pad).then(async () => {
       if (checkForWin()) {
         await alertWinner()
+        resetState(STATES.strict)
         return
       } else if (STATES.strict && STATES.lost) {
         resetState(STATES.strict)
@@ -187,6 +214,7 @@ gameOffBtn.onclick = () => {
   strictBtn.classList.remove('active')
   STATES.on = false
   STATES.started = false
+  stopSound()
   resetState(false)
   cancelTimers()
 }
@@ -198,6 +226,7 @@ gameOnBtn.onclick = () => {
 }
 
 startBtn.onclick = () => {
+  stopSound()
   beginGame()
 }
 
