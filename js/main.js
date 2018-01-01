@@ -53,14 +53,16 @@ let currentTone
 
 const buttonsPads = [GREEN, RED, BLUE, YELLOW]
 const PRESS = 'press'
-const DELAY = 500
-const DELAY2 = 2000
+let DELAY = 500
+let DELAY2 = 2000
+let DELAY3 = 3000
+let DELAY4 = 5000
 const LIMIT = 20
 
 // View
 const gameOnBtn = document.querySelector('#GameOnBtn')
 const gameOffBtn = document.querySelector('#GameOffBtn')
-const scoreView = document.querySelector('#Score')
+const countView = document.querySelector('#Count')
 const startBtn = document.querySelector('#StartBtn')
 const strictBtn = document.querySelector('#StrictBtn')
 
@@ -77,6 +79,13 @@ let cancelTimers = () => {
   if (timer) clearTimeout(timer)
   if (winTimer) clearTimeout(winTimer)
   if (padTimer) padTimer.cancel()
+}
+
+let reduceDelays = () => {
+  DELAY = 250
+  DELAY2 = 1500
+  DELAY3 = 2000
+  DELAY4 = 2500
 }
 
 const addMove = () => {
@@ -105,6 +114,8 @@ let running = () => STATES.on && STATES.started
 const playGame = async () => {
   if (running()) {
     if (!STATES.lost) addMove()
+    countView.textContent = `${STATES.last.length}`
+    if (STATES.last.length === 5) reduceDelays()
     STATES.turn = TURNS.computer
     STATES.recalled = []
     STATES.pressed = false
@@ -146,7 +157,7 @@ async function checkInput(pad) {
   currentTone = gameTone(tone)
   currentTone.play()
 
-  padTimer = sleep(3000)
+  padTimer = sleep(DELAY3)
   return padTimer
 }
 
@@ -161,7 +172,7 @@ const checkForWin = () => {
 
 const stopSound = function () {
   timesUp = true
-  currentTone.stop()
+  if (currentTone) currentTone.stop()
 }
 
 const alertWinner = async () => {
@@ -171,7 +182,7 @@ const alertWinner = async () => {
   currentTone.play()
   winTimer = setTimeout(() => {
     stopSound()
-  }, 5000)
+  }, DELAY4)
   let x = 0
   while (STATES.on && !timesUp) {
     let i = x++ % 4
@@ -214,6 +225,7 @@ gameOffBtn.onclick = () => {
   strictBtn.classList.remove('active')
   STATES.on = false
   STATES.started = false
+  countView.textContent = ''
   stopSound()
   resetState(false)
   cancelTimers()
