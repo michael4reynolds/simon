@@ -114,7 +114,7 @@ let running = () => STATES.on && STATES.started
 const playGame = async () => {
   if (running()) {
     if (!STATES.lost) addMove()
-    countView.textContent = `${STATES.last.length}`
+    countView.textContent = `${STATES.last.length}`.padStart(2, '0')
     if (STATES.last.length === 5) reduceDelays()
     STATES.turn = TURNS.computer
     STATES.recalled = []
