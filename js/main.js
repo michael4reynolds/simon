@@ -65,14 +65,19 @@ const gameOffBtn = document.querySelector('#GameOffBtn')
 const countView = document.querySelector('#Count')
 const startBtn = document.querySelector('#StartBtn')
 const strictBtn = document.querySelector('#StrictBtn')
+const lastBtn = document.querySelector('#LastBtn')
+const longestBtn = document.querySelector('#LongestBtn')
 
 // Controller
 let resetState = (strict = false) => {
-  SAVED.last = STATES.last
   STATES.turn = TURNS.computer
   STATES.last = []
   STATES.lost = false
   STATES.strict = strict
+  DELAY = 500
+  DELAY2 = 2000
+  DELAY3 = 3000
+  DELAY4 = 5000
 }
 
 let cancelTimers = () => {
@@ -102,8 +107,8 @@ const playMove = async function (move) {
   await sleep(DELAY)
 }
 
-const playMoves = async () => {
-  for (let move of STATES.last) {
+const playMoves = async (moves) => {
+  for (let move of moves) {
     if (!STATES.on || !STATES.started) break
     await playMove(move)
   }
@@ -113,13 +118,18 @@ let running = () => STATES.on && STATES.started
 
 const playGame = async () => {
   if (running()) {
-    if (!STATES.lost) addMove()
+    if (!STATES.lost) {
+      SAVED.last = STATES.recalled
+      if (STATES.last.length > SAVED.longest.length) SAVED.longest = STATES.recalled
+
+      addMove()
+    }
     countView.textContent = `${STATES.last.length}`.padStart(2, '0')
     if (STATES.last.length === 5) reduceDelays()
     STATES.turn = TURNS.computer
     STATES.recalled = []
     STATES.pressed = false
-    await playMoves()
+    await playMoves(STATES.last)
 
     STATES.turn = TURNS.human
     timer = setTimeout(async () => {
@@ -251,6 +261,22 @@ strictBtn.onclick = () => {
     STATES.strict = false
     strictBtn.classList.remove('active')
   }
+}
+
+lastBtn.onclick = async () => {
+  if (!STATES.on || STATES.started) return
+  if (SAVED.last.length > 4) reduceDelays()
+  STATES.started = true
+  await playMoves(SAVED.last)
+  STATES.started = false
+}
+
+longestBtn.onclick = async () => {
+  if (!STATES.on || STATES.started) return
+  if (SAVED.longest.length > 4) reduceDelays()
+  STATES.started = true
+  await playMoves(SAVED.longest)
+  STATES.started = false
 }
 
 // Initialize
