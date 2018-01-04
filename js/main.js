@@ -248,6 +248,10 @@ gameOnBtn.onclick = () => {
 }
 
 startBtn.onclick = () => {
+  startBtn.querySelectorAll('circle')[1].classList.add('active')
+  setTimeout(() => {
+    startBtn.querySelectorAll('circle')[1].classList.remove('active')
+  }, 150)
   stopSound()
   beginGame()
 }
@@ -267,7 +271,9 @@ lastBtn.onclick = async () => {
   if (!STATES.on || STATES.started) return
   if (SAVED.last.length > 4) reduceDelays()
   STATES.started = true
+  lastBtn.querySelectorAll('circle')[1].classList.add('active')
   await playMoves(SAVED.last)
+  lastBtn.querySelectorAll('circle')[1].classList.remove('active')
   STATES.started = false
 }
 
@@ -275,7 +281,9 @@ longestBtn.onclick = async () => {
   if (!STATES.on || STATES.started) return
   if (SAVED.longest.length > 4) reduceDelays()
   STATES.started = true
+  longestBtn.querySelectorAll('circle')[1].classList.add('active')
   await playMoves(SAVED.longest)
+  longestBtn.querySelectorAll('circle')[1].classList.remove('active')
   STATES.started = false
 }
 

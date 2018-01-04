@@ -48,3 +48,7 @@
 #StrictBtn.active {
   fill: color(#5cb85c)
 }
+
+#StartBtn circle.active, #LastBtn circle.active, #LongestBtn circle.active {
+  fill: color(#5cb85c)
+}
