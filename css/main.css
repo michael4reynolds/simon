@@ -1,8 +1,8 @@
 .container-grid.container-2 {
-    display: flex;
-    align-content: flex-start;
-    align-items: flex-start;
-    justify-content: center;
+  display: flex;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .html-element.html-element-1 {
