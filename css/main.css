@@ -52,3 +52,33 @@
 #StartBtn circle.active, #LastBtn circle.active, #LongestBtn circle.active {
   fill: color(#5cb85c)
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: 76px 76px 10px 76px 76px;
+  grid-template-rows: 153px 10px 153px;
+  grid-template-areas:
+      "greenPad greenPad . redPad redPad"
+      ". . . . ."
+      "yellowPad yellowPad . bluePad bluePad";
+}
+
+.greenPad {
+  grid-area: greenPad;
+  background: url("../img/GreenBtn.png");
+}
+
+.redPad {
+  grid-area: redPad;
+  background: url("../img/RedBtn.png");
+}
+
+.bluePad {
+  grid-area: bluePad;
+  background: url("../img/BlueBtn.png");
+}
+
+.yellowPad {
+  grid-area: yellowPad;
+  background: url("../img/YellowBtn.png");
+}
