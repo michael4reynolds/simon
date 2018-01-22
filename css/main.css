@@ -55,30 +55,50 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 76px 76px 10px 76px 76px;
-  grid-template-rows: 153px 10px 153px;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(2, 160px);
   grid-template-areas:
-      "greenPad greenPad . redPad redPad"
-      ". . . . ."
-      "yellowPad yellowPad . bluePad bluePad";
+      "greenPad greenPad redPad redPad"
+      "yellowPad yellowPad bluePad bluePad";
 }
 
 .greenPad {
   grid-area: greenPad;
-  background: url("../img/GreenBtn.png");
+  background: #388F3C;
+  border-top-left-radius: 100%;
+  border-right: 5px solid #000;
+  border-bottom: 5px solid #000;
 }
 
 .redPad {
   grid-area: redPad;
-  background: url("../img/RedBtn.png");
+  background: #FC0E04;
+  border-top-right-radius: 100%;
+  border-left: 5px solid #000;
+  border-bottom: 5px solid #000;
 }
 
 .bluePad {
   grid-area: bluePad;
-  background: url("../img/BlueBtn.png");
+  background: #1376D3;
+  border-bottom-right-radius: 100%;
+  border-left: 5px solid #000;
+  border-top: 5px solid #000;
 }
 
 .yellowPad {
   grid-area: yellowPad;
-  background: url("../img/YellowBtn.png");
+  background: #FAC12C;
+  border-bottom-left-radius: 100%;
+  border-right: 5px solid #000;
+  border-top: 5px solid #000;
+}
+
+.gameBackground {
+  width: 320px;
+  height: 320px;
+  background: #000;
+  border-radius: 50%;
+  grid-column: 1 / 5;
+  grid-row: 1 / 3;
 }
