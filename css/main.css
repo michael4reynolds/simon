@@ -147,3 +147,13 @@
   font-weight: lighter;
   margin-top: 25px
 }
+
+.gameSwitches {
+  background: #bebebe;
+  border: 1px solid #000;
+  border-bottom-left-radius: 68px;
+  border-bottom-right-radius: 68px;
+  grid-column: 1 / 6;
+  grid-row: 3 / 6;
+  transform: scale(.96, 1.05) translateY(-6px);
+}
