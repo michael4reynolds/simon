@@ -160,10 +160,10 @@
   grid-template-areas:
       ". . . . . . ."
       ". . countLabel . strictLabel . ."
-      ". . . . . . ."
+      ". . countDisplay . strictControl . ."
       ". . . . . . ."
       ". lastLabel . startLabel . longestLabel ."
-      ". . . . . . ."
+      ". lastControl . startControl . longestControl ."
       ". . . . . . .";
   background: #bebebe;
   border: 1px solid #000;
@@ -172,7 +172,7 @@
   grid-column: span 1;
   grid-row: 2 / 3;
   transform: scale(.96, 1.05) translateY(-6px);
-  font-size: 4px;
+  font-size: 5px;
   font-weight: bold;
 }
 
@@ -184,8 +184,8 @@
   grid-area: countLabel;
 }
 
-.countControl {
-  grid-area: countControl;
+.countDisplay {
+  grid-area: countDisplay;
 }
 
 .strictLabel {
@@ -194,6 +194,11 @@
 
 .strictControl {
   grid-area: strictControl;
+  background: #fac12c;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
 }
 
 .lastLabel {
@@ -202,6 +207,11 @@
 
 .lastControl {
   grid-area: lastControl;
+  background: #efff00;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
 }
 
 .startLabel {
@@ -210,6 +220,11 @@
 
 .startControl {
   grid-area: startControl;
+  background: #ff0e00;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
 }
 
 .longestLabel {
@@ -218,6 +233,11 @@
 
 .longestControl {
   grid-area: longestControl;
+  background: #efff00;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
 }
 
 .onOffControl {
