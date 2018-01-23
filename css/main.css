@@ -153,6 +153,18 @@
 }
 
 .gameSwitches {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(2, 5px 1fr 2fr) 2fr;
+  grid-template-areas:
+      ". . . . . . ."
+      ". . countLabel . strictLabel . ."
+      ". . . . . . ."
+      ". . . . . . ."
+      ". lastLabel . startLabel . longestLabel ."
+      ". . . . . . ."
+      ". . . . . . .";
   background: #bebebe;
   border: 1px solid #000;
   border-bottom-left-radius: 68px;
@@ -160,4 +172,59 @@
   grid-column: span 1;
   grid-row: 2 / 3;
   transform: scale(.96, 1.05) translateY(-6px);
+  font-size: 4px;
+  font-weight: bold;
+}
+
+.gameSwitches [class$='Label'] {
+  overflow: hidden;
+}
+
+.countLabel {
+  grid-area: countLabel;
+}
+
+.countControl {
+  grid-area: countControl;
+}
+
+.strictLabel {
+  grid-area: strictLabel;
+}
+
+.strictControl {
+  grid-area: strictControl;
+}
+
+.lastLabel {
+  grid-area: lastLabel;
+}
+
+.lastControl {
+  grid-area: lastControl;
+}
+
+.startLabel {
+  grid-area: startLabel;
+}
+
+.startControl {
+  grid-area: startControl;
+}
+
+.longestLabel {
+  grid-area: longestLabel;
+}
+
+.longestControl {
+  grid-area: longestControl;
+}
+
+.onOffControl {
+  display: flex;
+  align-content: flex-start;
+}
+
+.onOffControl.active {
+  align-content: flex-end;
 }
