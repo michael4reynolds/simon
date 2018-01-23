@@ -156,12 +156,10 @@
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(2, 5px 1fr 2fr) 2fr;
+  grid-template-rows: 1.3em 2fr 1.3em 2fr 2fr;
   grid-template-areas:
-      ". . . . . . ."
       ". . countLabel . strictLabel . ."
       ". . countDisplay . strictControl . ."
-      ". . . . . . ."
       ". lastLabel . startLabel . longestLabel ."
       ". lastControl . startControl . longestControl ."
       ". . . . . . .";
@@ -172,12 +170,13 @@
   grid-column: span 1;
   grid-row: 2 / 3;
   transform: scale(.96, 1.05) translateY(-6px);
-  font-size: 5px;
-  font-weight: bold;
+  font-size: 7px;
+  font-weight: 900;
 }
 
 .gameSwitches [class$='Label'] {
   overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .countLabel {
