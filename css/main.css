@@ -159,7 +159,7 @@
   grid-template-rows: 1.3em 2fr 1.3em 2fr 2fr;
   grid-template-areas:
       ". . countLabel . strictLabel . ."
-      ". . countDisplay . strictControl . ."
+      ". countDisplay countDisplay countDisplay strictControl . ."
       ". lastLabel . startLabel . longestLabel ."
       ". lastControl . startControl . longestControl ."
       ". . onOffControl onOffControl onOffControl . .";
@@ -185,6 +185,16 @@
 
 .countDisplay {
   grid-area: countDisplay;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #000;
+  border-radius: 3px;
+  width: 26px;
+  height: 16px;
+  color: orange;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .strictLabel {
