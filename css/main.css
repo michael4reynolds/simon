@@ -162,7 +162,7 @@
       ". . countDisplay . strictControl . ."
       ". lastLabel . startLabel . longestLabel ."
       ". lastControl . startControl . longestControl ."
-      ". . . . . . .";
+      ". . onOffControl onOffControl onOffControl . .";
   background: #bebebe;
   border: 1px solid #000;
   border-bottom-left-radius: 68px;
@@ -240,10 +240,22 @@
 }
 
 .onOffControl {
+  grid-area: onOffControl;
   display: flex;
-  align-content: flex-start;
+  justify-content: center;
+  align-items: center;
 }
 
-.onOffControl.active {
-  align-content: flex-end;
+.onOffButton {
+  background: #000;
+  border-radius: 3px;
+  border-left: 12px solid #FC0E04;
+  margin: 0 2px;
+  width: 24px;
+  height: 8px;
+}
+
+.onOffButton.active {
+  border-left: none;
+  border-right: 12px solid #FC0E04;
 }
