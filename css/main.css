@@ -64,7 +64,7 @@
       "yellowPad yellowPad bluePad bluePad";
 }
 
-.greenPad {
+#greenPad {
   grid-area: greenPad;
   background: #388F3C;
   border-top-left-radius: 100%;
@@ -72,7 +72,7 @@
   border-bottom: 5px solid #000;
 }
 
-.redPad {
+#redPad {
   grid-area: redPad;
   background: #FC0E04;
   border-top-right-radius: 100%;
@@ -80,7 +80,7 @@
   border-bottom: 5px solid #000;
 }
 
-.bluePad {
+#bluePad {
   grid-area: bluePad;
   background: #1376D3;
   border-bottom-right-radius: 100%;
@@ -88,7 +88,7 @@
   border-top: 5px solid #000;
 }
 
-.yellowPad {
+#yellowPad {
   grid-area: yellowPad;
   background: #FAC12C;
   border-bottom-left-radius: 100%;
@@ -183,7 +183,7 @@
   grid-area: countLabel;
 }
 
-.countDisplay {
+#countDisplay {
   grid-area: countDisplay;
   display: flex;
   justify-content: space-around;
@@ -201,7 +201,7 @@
   grid-area: strictLabel;
 }
 
-.strictControl {
+#strictControl {
   grid-area: strictControl;
   background: #fac12c;
   border: 2px solid #000;
@@ -210,11 +210,15 @@
   height: 15px;
 }
 
+#strictControl.active {
+  background: #5cb85c;
+}
+
 .lastLabel {
   grid-area: lastLabel;
 }
 
-.lastControl {
+#lastControl {
   grid-area: lastControl;
   background: #efff00;
   border: 2px solid #000;
@@ -227,7 +231,7 @@
   grid-area: startLabel;
 }
 
-.startControl {
+#startControl {
   grid-area: startControl;
   background: #ff0e00;
   border: 2px solid #000;
@@ -240,7 +244,7 @@
   grid-area: longestLabel;
 }
 
-.longestControl {
+#longestControl {
   grid-area: longestControl;
   background: #efff00;
   border: 2px solid #000;
@@ -256,7 +260,7 @@
   align-items: center;
 }
 
-.onOffButton {
+#onOffButton {
   background: #000;
   border-radius: 3px;
   border-left: 12px solid #FC0E04;
@@ -265,7 +269,11 @@
   height: 8px;
 }
 
-.onOffButton.active {
+#onOffButton.active {
   border-left: none;
   border-right: 12px solid #FC0E04;
+}
+
+#startControl.active, #lastControl.active, #longestControl.active {
+  background: #5cb85c;
 }

@@ -39,10 +39,10 @@ const STATES = {
   last: [], recalled: [], lost: false, pressed: false, timeout: false,
 }
 const SAVED = {last: [], longest: []}
-const GREEN = {key: 0, button: document.querySelector('#GreenBtn'), tone: 'sounds/simonSound0.mp3'}
-const RED = {key: 1, button: document.querySelector('#RedBtn'), tone: 'sounds/simonSound1.mp3'}
-const BLUE = {key: 2, button: document.querySelector('#BlueBtn'), tone: 'sounds/simonSound2.mp3'}
-const YELLOW = {key: 3, button: document.querySelector('#YellowBtn'), tone: 'sounds/simonSound3.mp3'}
+const GREEN = {key: 0, button: document.querySelector('#greenPad'), tone: 'sounds/simonSound0.mp3'}
+const RED = {key: 1, button: document.querySelector('#redPad'), tone: 'sounds/simonSound1.mp3'}
+const BLUE = {key: 2, button: document.querySelector('#bluePad'), tone: 'sounds/simonSound2.mp3'}
+const YELLOW = {key: 3, button: document.querySelector('#yellowPad'), tone: 'sounds/simonSound3.mp3'}
 const errorTone = 'sounds/simonError.mp3'
 const winningTone = 'sounds/simonWin.mp3'
 let timer
@@ -60,13 +60,12 @@ let DELAY4 = 5000
 const LIMIT = 20
 
 // View
-const gameOnBtn = document.querySelector('#GameOnBtn')
-const gameOffBtn = document.querySelector('#GameOffBtn')
-const countView = document.querySelector('#Count')
-const startBtn = document.querySelector('#StartBtn')
-const strictBtn = document.querySelector('#StrictBtn')
-const lastBtn = document.querySelector('#LastBtn')
-const longestBtn = document.querySelector('#LongestBtn')
+const gameOnBtn = document.querySelector('#onOffButton')
+const countView = document.querySelector('#countDisplay')
+const startBtn = document.querySelector('#startControl')
+const strictBtn = document.querySelector('#strictControl')
+const lastBtn = document.querySelector('#lastControl')
+const longestBtn = document.querySelector('#longestControl')
 
 // Controller
 let resetState = (strict = false) => {
@@ -124,7 +123,7 @@ const playGame = async () => {
 
       addMove()
     }
-    countView.textContent = `${STATES.last.length}`.padStart(2, '0')
+    countView.text = `${STATES.last.length}`.padStart(2, '0')
     if (STATES.last.length === 5) reduceDelays()
     STATES.turn = TURNS.computer
     STATES.recalled = []
@@ -229,28 +228,38 @@ buttonsPads.forEach(pad => {
   }
 })
 
-gameOffBtn.onclick = () => {
-  gameOnBtn.classList.remove('active')
-  gameOffBtn.classList.add('active')
-  strictBtn.classList.remove('active')
-  STATES.on = false
-  STATES.started = false
-  countView.textContent = ''
-  stopSound()
-  resetState(false)
-  cancelTimers()
-}
+// gameOffBtn.onclick = () => {
+//   gameOnBtn.classList.remove('active')
+//   gameOffBtn.classList.add('active')
+//   strictBtn.classList.remove('active')
+//   STATES.on = false
+//   STATES.started = false
+//   countView.textContent = ''
+//   stopSound()
+//   resetState(false)
+//   cancelTimers()
+// }
 
 gameOnBtn.onclick = () => {
-  gameOffBtn.classList.remove('active')
-  gameOnBtn.classList.add('active')
-  STATES.on = true
+  const gameIsON = gameOnBtn.classList.contains('active')
+  gameOnBtn.classList.toggle('active')
+
+  if (gameIsON) {
+    STATES.on = false
+    STATES.started = false
+    countView.text = ''
+    stopSound()
+    resetState(false)
+    cancelTimers()
+  } else {
+    STATES.on = true
+  }
 }
 
 startBtn.onclick = () => {
-  startBtn.querySelectorAll('circle')[1].classList.add('active')
+  startBtn.classList.add('active')
   setTimeout(() => {
-    startBtn.querySelectorAll('circle')[1].classList.remove('active')
+    startBtn.classList.remove('active')
   }, 150)
   stopSound()
   beginGame()
@@ -290,7 +299,7 @@ longestBtn.onclick = async () => {
 // Initialize
 function init() {
   try {
-    gameOffBtn.classList.add('active')
+    // gameOffBtn.classList.add('active')
   } catch (e) {
     console.log(e)
   }
