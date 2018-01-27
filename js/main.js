@@ -119,11 +119,12 @@ const playGame = async () => {
   if (running()) {
     if (!STATES.lost) {
       SAVED.last = STATES.recalled
-      if (STATES.last.length > SAVED.longest.length) SAVED.longest = STATES.recalled
-
+      if (STATES.last.length > SAVED.longest.length) {
+        SAVED.longest = STATES.recalled
+      }
       addMove()
     }
-    countView.text = `${STATES.last.length}`.padStart(2, '0')
+    countView.innerText = `${STATES.last.length}`.padStart(2, '0')
     if (STATES.last.length === 5) reduceDelays()
     STATES.turn = TURNS.computer
     STATES.recalled = []
@@ -228,26 +229,15 @@ buttonsPads.forEach(pad => {
   }
 })
 
-// gameOffBtn.onclick = () => {
-//   gameOnBtn.classList.remove('active')
-//   gameOffBtn.classList.add('active')
-//   strictBtn.classList.remove('active')
-//   STATES.on = false
-//   STATES.started = false
-//   countView.textContent = ''
-//   stopSound()
-//   resetState(false)
-//   cancelTimers()
-// }
-
 gameOnBtn.onclick = () => {
   const gameIsON = gameOnBtn.classList.contains('active')
   gameOnBtn.classList.toggle('active')
 
   if (gameIsON) {
+    strictBtn.classList.remove('active')
     STATES.on = false
     STATES.started = false
-    countView.text = ''
+    countView.innerText = ''
     stopSound()
     resetState(false)
     cancelTimers()
@@ -280,9 +270,9 @@ lastBtn.onclick = async () => {
   if (!STATES.on || STATES.started) return
   if (SAVED.last.length > 4) reduceDelays()
   STATES.started = true
-  lastBtn.querySelectorAll('circle')[1].classList.add('active')
+  lastBtn.classList.add('active')
   await playMoves(SAVED.last)
-  lastBtn.querySelectorAll('circle')[1].classList.remove('active')
+  lastBtn.classList.remove('active')
   STATES.started = false
 }
 
@@ -290,19 +280,10 @@ longestBtn.onclick = async () => {
   if (!STATES.on || STATES.started) return
   if (SAVED.longest.length > 4) reduceDelays()
   STATES.started = true
-  longestBtn.querySelectorAll('circle')[1].classList.add('active')
+  longestBtn.classList.add('active')
   await playMoves(SAVED.longest)
-  longestBtn.querySelectorAll('circle')[1].classList.remove('active')
+  longestBtn.classList.remove('active')
   STATES.started = false
 }
 
 // Initialize
-function init() {
-  try {
-    // gameOffBtn.classList.add('active')
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-init()

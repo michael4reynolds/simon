@@ -9,50 +9,6 @@
   padding: 10px;
 }
 
-#YellowBtn.press {
-  fill: color(#FCC12D lightness(75%));
-}
-
-#BlueBtn.press {
-  fill: color(#1976D3 blackness(-25%));
-}
-
-#GreenBtn.press {
-  fill: color(#388F3C blackness(-25%));
-}
-
-#RedBtn.press {
-  fill: color(#D42F2F blackness(-25%));
-}
-
-#GameOnBtn {
-  fill: color(#010001)
-}
-
-#GameOnBtn.active {
-  fill: color(#fc0e04);
-}
-
-#GameOffBtn {
-  fill: color(#010001)
-}
-
-#GameOffBtn.active {
-  fill: color(#fc0e04);
-}
-
-#StrictBtn {
-  fill: #fac12c
-}
-
-#StrictBtn.active {
-  fill: color(#5cb85c)
-}
-
-#StartBtn circle.active, #LastBtn circle.active, #LongestBtn circle.active {
-  fill: color(#5cb85c)
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 80px);
@@ -74,7 +30,7 @@
 
 #redPad {
   grid-area: redPad;
-  background: #FC0E04;
+  background: #D6170F;
   border-top-right-radius: 100%;
   border-left: 5px solid #000;
   border-bottom: 5px solid #000;
@@ -94,6 +50,10 @@
   border-bottom-left-radius: 100%;
   border-right: 5px solid #000;
   border-top: 5px solid #000;
+}
+
+#greenPad.press, #redPad.press, #bluePad.press, #yellowPad.press {
+  filter: brightness(150%);
 }
 
 .gameBackground {
@@ -262,7 +222,7 @@
 
 #onOffButton {
   background: #000;
-  border-radius: 3px;
+  border-radius: 4px / 2px;
   border-left: 12px solid #FC0E04;
   margin: 0 2px;
   width: 24px;
