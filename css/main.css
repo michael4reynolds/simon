@@ -1,18 +1,17 @@
-.container-grid.container-2 {
+html {
+  font-size: 10px;
+}
+
+.container-grid {
   display: flex;
-  align-content: flex-start;
-  align-items: flex-start;
   justify-content: center;
+  margin-top: 1em;
 }
 
-.html-element.html-element-1 {
-  padding: 10px;
-}
-
-.grid {
+.game-grid {
   display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(4, 80px);
+  grid-template-columns: repeat(4, 8em);
+  grid-template-rows: repeat(4, 8em);
   grid-template-areas:
       "greenPad greenPad redPad redPad"
       "greenPad greenPad redPad redPad"
@@ -24,32 +23,32 @@
   grid-area: greenPad;
   background: #388F3C;
   border-top-left-radius: 100%;
-  border-right: 5px solid #000;
-  border-bottom: 5px solid #000;
+  border-right: .5rem solid #000;
+  border-bottom: .5rem solid #000;
 }
 
 #redPad {
   grid-area: redPad;
   background: #D6170F;
   border-top-right-radius: 100%;
-  border-left: 5px solid #000;
-  border-bottom: 5px solid #000;
+  border-left: .5rem solid #000;
+  border-bottom: .5rem solid #000;
 }
 
 #bluePad {
   grid-area: bluePad;
   background: #1376D3;
   border-bottom-right-radius: 100%;
-  border-left: 5px solid #000;
-  border-top: 5px solid #000;
+  border-left: .5rem solid #000;
+  border-top: .5rem solid #000;
 }
 
 #yellowPad {
   grid-area: yellowPad;
   background: #FAC12C;
   border-bottom-left-radius: 100%;
-  border-right: 5px solid #000;
-  border-top: 5px solid #000;
+  border-right: .5rem solid #000;
+  border-top: .5rem solid #000;
 }
 
 #greenPad.press, #redPad.press, #bluePad.press, #yellowPad.press {
@@ -57,8 +56,8 @@
 }
 
 .gameBackground {
-  width: 320px;
-  height: 320px;
+  width: 32em;
+  height: 32em;
   background: #000;
   border-radius: 50%;
   grid-column: 1 / 5;
@@ -80,7 +79,7 @@
   grid-template-rows: repeat(2, 1fr);
   flex: 1 100%;
   background: #bebebe;
-  border: 10px solid #000;
+  border: 1rem solid #000;
   border-radius: 50%;
   z-index: 5;
 }
@@ -90,26 +89,24 @@
   justify-content: center;
   align-items: center;
   background: #000;
-  border: 2px solid #bebebe;
-  /*border-bottom: 5px ridge #bebebe;*/
-  border-radius: 75px 75px / 75px 75px 0 0;
+  border: .2rem solid #bebebe;
+  border-radius: 7.5rem 7.5rem / 7.5rem 7.5rem 0 0;
   grid-column: span 1;
   grid-row: 1 / 2;
   clip-path: inset(0 0 20% 0);
-  /*transform: translateY(-5px);*/
   color: #bebebe;
   font-family: 'Lato', sans-serif;
-  font-size: 28px;
+  font-size: 2.8rem;
 }
 
 .mainLabel {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 .tm {
-  font-size: 8px;
+  font-size: .8rem;
   font-weight: lighter;
-  margin-top: 25px
+  margin-top: 2.5rem;
 }
 
 .gameSwitches {
@@ -124,13 +121,13 @@
       ". lastControl . startControl . longestControl ."
       ". . onOffControl onOffControl onOffControl . .";
   background: #bebebe;
-  border: 1px solid #000;
-  border-bottom-left-radius: 68px;
-  border-bottom-right-radius: 68px;
+  border: .1rem solid #000;
+  border-bottom-left-radius: 6.8rem;
+  border-bottom-right-radius: 6.8rem;
   grid-column: span 1;
   grid-row: 2 / 3;
-  transform: scale(.96, 1.05) translateY(-6px);
-  font-size: 7px;
+  transform: scale(.96, 1.05) translateY(-.6rem);
+  font-size: .7rem;
   font-weight: 900;
 }
 
@@ -149,11 +146,11 @@
   justify-content: space-around;
   align-items: center;
   background: #000;
-  border-radius: 3px;
-  width: 26px;
-  height: 16px;
+  border-radius: .3rem;
+  width: 2.6rem;
+  height: 1.6rem;
   color: orange;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 500;
 }
 
@@ -164,10 +161,10 @@
 #strictControl {
   grid-area: strictControl;
   background: #fac12c;
-  border: 2px solid #000;
+  border: .2rem solid #000;
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 #strictControl.active {
@@ -181,10 +178,10 @@
 #lastControl {
   grid-area: lastControl;
   background: #efff00;
-  border: 2px solid #000;
+  border: .2rem solid #000;
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .startLabel {
@@ -194,10 +191,10 @@
 #startControl {
   grid-area: startControl;
   background: #ff0e00;
-  border: 2px solid #000;
+  border: .2rem solid #000;
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .longestLabel {
@@ -207,10 +204,10 @@
 #longestControl {
   grid-area: longestControl;
   background: #efff00;
-  border: 2px solid #000;
+  border: .2rem solid #000;
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .onOffControl {
@@ -222,18 +219,30 @@
 
 #onOffButton {
   background: #000;
-  border-radius: 4px / 2px;
-  border-left: 12px solid #FC0E04;
-  margin: 0 2px;
-  width: 24px;
-  height: 8px;
+  border-radius: .4rem / .2rem;
+  border-left: 1.2rem solid #FC0E04;
+  margin: 0 .2rem;
+  width: 2.4rem;
+  height: .8rem;
 }
 
 #onOffButton.active {
   border-left: none;
-  border-right: 12px solid #FC0E04;
+  border-right: 1.2rem solid #FC0E04;
 }
 
 #startControl.active, #lastControl.active, #longestControl.active {
   background: #5cb85c;
+}
+
+@media screen and (min-width: 500px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 800px) and (min-height: 800px) {
+  html {
+    font-size: 20px;
+  }
 }
