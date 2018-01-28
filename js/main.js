@@ -225,7 +225,9 @@ buttonsPads.forEach(pad => {
   }
 
   pad.button.onmouseup = async () => {
-    pad.button.classList.remove(PRESS)
+    setTimeout(() => {
+      pad.button.classList.remove(PRESS)
+    }, 150)
   }
 })
 
@@ -250,7 +252,7 @@ startBtn.onclick = () => {
   startBtn.classList.add('active')
   setTimeout(() => {
     startBtn.classList.remove('active')
-  }, 150)
+  }, 500)
   stopSound()
   beginGame()
 }
