@@ -285,5 +285,3 @@ longestBtn.onclick = async () => {
   longestBtn.classList.remove('active')
   STATES.started = false
 }
-
-// Initialize
