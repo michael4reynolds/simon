@@ -12,26 +12,6 @@ function sleep(ms = 0, x) {
   return promise
 }
 
-class Sound {
-  constructor(src) {
-    this.sound = document.createElement("audio")
-    this.sound.src = src
-    this.sound.setAttribute("preload", "auto")
-    this.sound.setAttribute("controls", "none")
-    this.sound.style.display = "none"
-    document.body.appendChild(this.sound)
-  }
-
-  play() {
-    this.sound.play()
-  }
-
-  stop() {
-    this.sound.pause()
-    this.sound.currentTime = 0
-  }
-}
-
 // Model
 const TURNS = {computer: 'computer', human: 'human'}
 const STATES = {
@@ -39,12 +19,13 @@ const STATES = {
   last: [], recalled: [], lost: false, pressed: false, timeout: false,
 }
 const SAVED = {last: [], longest: []}
-const GREEN = {key: 0, button: document.querySelector('#greenPad'), tone: 'sounds/simonSound0.mp3'}
-const RED = {key: 1, button: document.querySelector('#redPad'), tone: 'sounds/simonSound1.mp3'}
-const BLUE = {key: 2, button: document.querySelector('#bluePad'), tone: 'sounds/simonSound2.mp3'}
-const YELLOW = {key: 3, button: document.querySelector('#yellowPad'), tone: 'sounds/simonSound3.mp3'}
-const errorTone = 'sounds/simonError.mp3'
+const GREEN = {key: 0, button: document.querySelector('#greenPad'), tone: 330}
+const RED = {key: 1, button: document.querySelector('#redPad'), tone: 360}
+const BLUE = {key: 2, button: document.querySelector('#bluePad'), tone: 390}
+const YELLOW = {key: 3, button: document.querySelector('#yellowPad'), tone: 420}
+const errorTone = 160
 const winningTone = 'sounds/simonWin.mp3'
+let osc
 let timer
 let winTimer
 let timesUp
@@ -92,16 +73,19 @@ let reduceDelays = () => {
   DELAY4 = 2500
 }
 
+const gameTone = tone => new Tone.Oscillator(tone, 'triangle').toMaster()
+
 const addMove = () => {
   STATES.last.push(randomNote())
 }
 
 const playMove = async function (move) {
-  let sound = new Sound(buttonsPads[move].tone)
-  sound.play()
+  osc = gameTone(buttonsPads[move].tone)
   let button = buttonsPads[move].button
+  osc.start()
   button.classList.add(PRESS)
   await sleep(DELAY)
+  osc.stop()
   button.classList.remove(PRESS)
   await sleep(DELAY)
 }
@@ -151,8 +135,6 @@ const beginGame = async () => {
   await playGame()
 }
 
-const gameTone = tone => new Sound(tone)
-
 async function checkInput(pad) {
   STATES.recalled.push(pad.key)
   STATES.lost = false
@@ -165,7 +147,7 @@ async function checkInput(pad) {
   }
   let tone = STATES.lost ? errorTone : pad.tone
   currentTone = gameTone(tone)
-  currentTone.play()
+  currentTone.start()
 
   padTimer = sleep(DELAY3)
   return padTimer
@@ -188,8 +170,10 @@ const stopSound = function () {
 const alertWinner = async () => {
   STATES.turn = TURNS.computer
   timesUp = false
-  currentTone = gameTone(winningTone)
-  currentTone.play()
+  currentTone = new Tone.Player({
+    url: winningTone,
+    autostart: true,
+  }).toMaster()
   winTimer = setTimeout(() => {
     stopSound()
   }, DELAY4)
@@ -227,6 +211,7 @@ buttonsPads.forEach(pad => {
   pad.button.onmouseup = async () => {
     setTimeout(() => {
       pad.button.classList.remove(PRESS)
+      currentTone.stop()
     }, 100)
   }
 })
