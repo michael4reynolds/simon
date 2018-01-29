@@ -227,7 +227,7 @@ buttonsPads.forEach(pad => {
   pad.button.onmouseup = async () => {
     setTimeout(() => {
       pad.button.classList.remove(PRESS)
-    }, 150)
+    }, 100)
   }
 })
 
